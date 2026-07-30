@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tıbbi Dokümantasyon ve Sekreterlik Ders Programı</title>
+  <style>
+    :root {
+      --primary-color: #1a365d;
+      --secondary-color: #2b6cb0;
+      --accent-color: #319795;
+      --bg-color: #f7fafc;
+      --card-bg: #ffffff;
+      --border-color: #e2e8f0;
+      --text-color: #2d3748;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      padding: 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      color: var(--primary-color);
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      color: #718096;
+      font-size: 0.95rem;
+    }
+
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 24px;
+      background: var(--card-bg);
+      padding: 16px 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      flex-wrap: wrap;
+      border: 1px solid var(--border-color);
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    label {
+      font-weight: 600;
+      color: var(--primary-color);
+      font-size: 0.9rem;
+    }
+
+    select {
+      padding: 8px 14px;
+      border: 1px solid #cbd5e0;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      outline: none;
+      background-color: #fff;
+      color: var(--text-color);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    select:focus {
+      border-color: var(--secondary-color);
+      box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+      border: 1px solid var(--border-color);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 10px;
+      text-align: center;
+      vertical-align: top;
+      font-size: 0.85rem;
+    }
+
+    th {
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 600;
+      width: 18%;
+      padding: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 0.8rem;
+    }
+
+    th:first-child {
+      width: 10%;
+    }
+
+    .time-slot {
+      font-weight: 600;
+      background-color: #edf2f7;
+      color: #4a5568;
+      vertical-align: middle;
+      font-size: 0.8rem;
+    }
+
+    .course-card {
+      background-color: #ebf8ff;
+      border-left: 4px solid var(--secondary-color);
+      padding: 8px 10px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      text-align: left;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .course-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+    }
+
+    .course-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .grade-1 {
+      border-left-color: #319795;
+      background-color: #e6fffa;
+    }
+
+    .grade-2 {
+      border-left-color: #3182ce;
+      background-color: #ebf8ff;
+    }
+
+    .course-name {
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 3px;
+      font-size: 0.85rem;
+    }
+
+    .course-meta {
+      font-size: 0.75rem;
+      color: #718096;
+      margin-bottom: 4px;
+    }
+
+    .instructor-badge {
+      display: inline-block;
+      background-color: #cbd5e0;
+      color: #2d3748;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.7rem;
+    }
+
+    .capacity-badge {
+      display: inline-block;
+      color: #718096;
+      font-size: 0.7rem;
+      margin-left: 4px;
+    }
+
+    .break {
+      background-color: #fff5f5;
+      color: #e53e3e;
+      font-weight: 600;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px dashed #feb2b2;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Tıbbi Dokümantasyon ve Sekreterlik Ders Programı</h1>
+    <div class="subtitle">2026-2027 Güz Dönemi</div>
+  </header>
+
+  <div class="filters">
+    <div class="filter-group">
+      <label for="instructorFilter">Ders Sahibi:</label>
+      <select id="instructorFilter">
+        <option value="ALL">ALL (Hepsini Göster)</option>
+        <option value="MVG">MVG</option>
+        <option value="MGG">MGG</option>
+        <option value="DMD">DMD</option>
+        <option value="İMB">İMB</option>
+        <option value="ÖOA">ÖOA</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="gradeFilter">Sınıf:</label>
+      <select id="gradeFilter">
+        <option value="ALL">Tüm Sınıflar</option>
+        <option value="1">1. Sınıf</option>
+        <option value="2">2. Sınıf</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table id="scheduleTable">
+      <thead>
+        <tr>
+          <th>Saat</th>
+          <th>Pazartesi</th>
+          <th>Salı</th>
+          <th>Çarşamba</th>
+          <th>Perşembe</th>
+          <th>Cuma</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <!-- JS ile dinamik doldurulur -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const ORTAK_HOCALAR = ["MVG", "MGG", "DMD"];
+
+    const scheduleData = [
+      {
+        time: "08.30-09.15",
+        slots: {
+          Pazartesi: [],
+          Salı: [],
+          Çarşamba: [],
+          Perşembe: [
+            { name: "TDS 207", grade: 2, type: "Hastane uygulaması", instructors: ORTAK_HOCALAR, capacity: "25 kişi" }
+          ],
+          Cuma: [
+            { name: "TDS 203-MYO 201", grade: 2, type: "Hastane uygulaması", instructors: ORTAK_HOCALAR, capacity: "25 kişi" }
+          ]
+        }
+      },
+      {
+        time: "09.25-10.10",
+        slots: {
+          Pazartesi: [],
+          Salı: [
+            { name: "BLG 154", grade: 2, type: "Uygulama için Bilgisayar Laboratuvarı", instructors: ["MVG"], capacity: "30 kişi" }
+          ],
+          Çarşamba: [],
+          Perşembe: [
+            { name: "TDS 207", grade: 2, type: "Hastane uygulaması", instructors: ORTAK_HOCALAR, capacity: "25 kişi" }
+          ],
+          Cuma: [
+            { name: "TDS 215", grade: 2, type: "Hastane uygulaması", instructors: ORTAK_HOCALAR, capacity: "25 kişi" }
+          ]
+        }
+      },
+      {
+        time: "10.20-11.05",
+        slots: {
+          Pazartesi: [
+            { name: "TDS 207", grade: 2, type: "Teorik", instructors: ["MGG"], capacity: "30 kişi" }
+          ],
+          Salı: [
+            { name: "BLG 154", grade: 2, type: "Uygulama için Bilgisayar Laboratuvarı", instructors: ["MVG"], capacity: "30 kişi" }
+          ],
+          Çarşamba: [
+            { name: "TDS 101", grade: 1, type: "Teorik", instructors: ["MGG"], capacity: "25 kişi" },
+            { name: "TDS 165", grade: 2, type: "Teorik", instructors: ["MGG"], capacity: "25 kişi" }
+          ],
+          Perşembe: [
+            { name: "TDS 207", grade: 2, type: "Hastane uygulaması", instructors: ORTAK_HOCALAR, capacity: "25 kişi" }
+          ],
+          Cuma: [
+            { name: "TDS 215", grade: 2, type: "Hastane uygulaması", instructors: ORTAK_HOCALAR, capacity: "25 kişi" }
+          ]
+        }
+      },
+      {
+        time: "11.15-12.00",
+        slots: {
+          Pazartesi: [
+            { name: "BLG 153", grade: 1, type: "Uygulama için Bilgisayar Laboratuvarı", instructors: ["MVG"], capacity: "25 kişi" },
+            { name: "TDS 207", grade: 2, type: "Teorik", instructors: ["MGG"], capacity: "30 kişi" }
+          ],
+          Salı: [
+            { name: "TDS 203-MYO 201", grade: 2, type: "Teorik", instructors: ["DMD"], capacity: "30 kişi" }
+          ],
+          Çarşamba: [
+            { name: "TDS 101", grade: 1, type: "Teorik", instructors: ["MGG"], capacity: "25 kişi" },
+            { name: "TDS 165", grade: 2, type: "Teorik", instructors: ["MGG"], capacity: "25 kişi" }
+          ],
+          Perşembe: [
+            { name: "TDS 207", grade: 2, type: "Hastane uygulaması", instructors: ORTAK_HOCALAR, capacity: "25 kişi" }
+          ],
+          Cuma: [
+            { name: "TDS 215", grade: 2, type: "Hastane uygulaması", instructors: ORTAK_HOCALAR, capacity: "25 kişi" }
+          ]
+        }
+      },
+      {
+        time: "12.10-12.55",
+        slots: {
+          Pazartesi: [
+            { name: "BLG 153", grade: 1, type: "Uygulama için Bilgisayar Laboratuvarı", instructors: ["MVG"], capacity: "25 kişi" }
+          ],
+          Salı: [
+            { name: "TDS 203- MYO 201", grade: 2, type: "Teorik", instructors: ["DMD"], capacity: "30 kişi" }
+          ],
+          Çarşamba: [
+            { name: "TDS 208", grade: 1, type: "Teorik", instructors: ["DMD"], capacity: "25 kişi" }
+          ],
+          Perşembe: [{ isBreak: true, text: "Öğle Arası" }],
+          Cuma: [{ isBreak: true, text: "Öğle Arası" }]
+        }
+      },
+      {
+        time: "13.05-13.50",
+        slots: {
+          Pazartesi: [
+            { name: "TDS 205", grade: 2, type: "Teorik", instructors: ["DMD"], capacity: "30 kişi" }
+          ],
+          Salı: [
+            { name: "TS 101", grade: 1, type: "Teorik", instructors: ["İMB"], capacity: "27 kişi" }
+          ],
+          Çarşamba: [
+            { name: "TDS 208", grade: 1, type: "Teorik", instructors: ["DMD"], capacity: "25 kişi" }
+          ],
+          Perşembe: [
+            { name: "TDS 203-MYO 201", grade: 2, type: "Hastane uygulaması", instructors: ORTAK_HOCALAR, capacity: "25 kişi" }
+          ],
+          Cuma: [
+            { name: "TDS 215", grade: 2, type: "Hastane uygulaması", instructors: ORTAK_HOCALAR, capacity: "25 kişi" }
+          ]
+        }
+      },
+      {
+        time: "14.00-14.45",
+        slots: {
+          Pazartesi: [
+            { name: "TDS 101", grade: 1, type: "Uygulama için Bilgisayar Laboratuvarı", instructors: ["MGG"], capacity: "25 kişi" },
+            { name: "TDS 205", grade: 2, type: "Teorik", instructors: ["DMD"], capacity: "30 kişi" }
+          ],
+          Salı: [
+            { name: "TS 101", grade: 1, type: "Teorik", instructors: ["İMB"], capacity: "27 kişi" }
+          ],
+          Çarşamba: [],
+          Perşembe: [
+            { name: "TDS 203-MYO 201", grade: 2, type: "Hastane uygulaması", instructors: ORTAK_HOCALAR, capacity: "25 kişi" }
+          ],
+          Cuma: [
+            { name: "TDS 215", grade: 2, type: "Hastane uygulaması", instructors: ORTAK_HOCALAR, capacity: "25 kişi" }
+          ]
+        }
+      },
+      {
+        time: "14.55-15.40",
+        slots: {
+          Pazartesi: [
+            { name: "TDS 101", grade: 1, type: "Uygulama için Bilgisayar Laboratuvarı", instructors: ["MGG"], capacity: "25 kişi" }
+          ],
+          Salı: [
+            { name: "TS 101", grade: 1, type: "Teorik", instructors: ["İMB"], capacity: "27 kişi" }
+          ],
+          Çarşamba: [
+            { name: "TDS 105", grade: 1, type: "Teorik", instructors: ["ÖOA"], capacity: "25 kişi" }
+          ],
+          Perşembe: [
+            { name: "TDS 203-MYO 201", grade: 2, type: "Hastane uygulaması", instructors: ORTAK_HOCALAR, capacity: "25 kişi" }
+          ],
+          Cuma: [
+            { name: "TDS 215", grade: 2, type: "Hastane uygulaması", instructors: ORTAK_HOCALAR, capacity: "25 kişi" }
+          ]
+        }
+      },
+      {
+        time: "15.50-16.35",
+        slots: {
+          Pazartesi: [
+            { name: "TS 115/TS 105", grade: 1, type: "Teorik", instructors: ORTAK_HOCALAR, capacity: "31 kişi" }
+          ],
+          Salı: [],
+          Çarşamba: [
+            { name: "TDS 105", grade: 1, type: "Teorik", instructors: ["ÖOA"], capacity: "25 kişi" }
+          ],
+          Perşembe: [],
+          Cuma: []
+        }
+      },
+      {
+        time: "16.45-17.30",
+        slots: {
+          Pazartesi: [
+            { name: "TS 115/TS 105", grade: 1, type: "Teorik", instructors: ORTAK_HOCALAR, capacity: "31 kişi" }
+          ],
+          Salı: [],
+          Çarşamba: [],
+          Perşembe: [],
+          Cuma: []
+        }
+      },
+      { time: "17.40-18.25", slots: { Pazartesi: [], Salı: [], Çarşamba: [], Perşembe: [], Cuma: [] } },
+      { time: "18.35-19.20", slots: { Pazartesi: [], Salı: [], Çarşamba: [], Perşembe: [], Cuma: [] } }
+    ];
+
+    const days = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma"];
+
+    function renderSchedule() {
+      const selectedInstructor = document.getElementById("instructorFilter").value;
+      const selectedGrade = document.getElementById("gradeFilter").value;
+      const tbody = document.getElementById("tableBody");
+      
+      tbody.innerHTML = "";
+
+      scheduleData.forEach(row => {
+        const tr = document.createElement("tr");
+
+        const timeTd = document.createElement("td");
+        timeTd.className = "time-slot";
+        timeTd.textContent = row.time;
+        tr.appendChild(timeTd);
+
+        days.forEach(day => {
+          const td = document.createElement("td");
+          const courses = row.slots[day] || [];
+
+          courses.forEach(course => {
+            if (course.isBreak) {
+              const breakDiv = document.createElement("div");
+              breakDiv.className = "break";
+              breakDiv.textContent = course.text;
+              td.appendChild(breakDiv);
+              return;
+            }
+
+            const instructorMatch = (selectedInstructor === "ALL") || 
+                                    (course.instructors && course.instructors.includes(selectedInstructor));
+            
+            const gradeMatch = (selectedGrade === "ALL") || 
+                               (course.grade.toString() === selectedGrade);
+
+            if (instructorMatch && gradeMatch) {
+              const card = document.createElement("div");
+              card.className = `course-card grade-${course.grade}`;
+              
+              let cardHTML = `<div class="course-name">${course.name} (${course.grade}. Sınıf)</div>`;
+              cardHTML += `<div class="course-meta">(${course.type})</div>`;
+              
+              if (course.instructors && course.instructors.length > 0) {
+                cardHTML += `<span class="instructor-badge">${course.instructors.join(" / ")}</span>`;
+              }
+              if (course.capacity) {
+                cardHTML += `<span class="capacity-badge">• ${course.capacity}</span>`;
+              }
+
+              card.innerHTML = cardHTML;
+              td.appendChild(card);
+            }
+          });
+
+          tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById("instructorFilter").addEventListener("change", renderSchedule);
+    document.getElementById("gradeFilter").addEventListener("change", renderSchedule);
+
+    window.onload = renderSchedule;
+  </script>
+</body>
+</html>
